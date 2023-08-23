@@ -87,8 +87,26 @@ class HomeController extends Controller
         return redirect ('login');
     }
    }
+   public function show_order(){
+    if(Auth::id())
+    {
+        $id= Auth::user()->id;
+        $product= oder::where('user_id','=',$id)->get();
+    return view ('home.show_order',compact('product'));
+    }
+    else{
+
+        return redirect ('login');
+    }
+   }
    public function delete_cart($id){
     $data = cart::find($id);
+    $data->delete();
+    return redirect()->back()->with('message','Product Deleted Successfully ');
+
+}
+   public function cancel_order($id){
+    $data = oder::find($id);
     $data->delete();
     return redirect()->back()->with('message','Product Deleted Successfully ');
 
