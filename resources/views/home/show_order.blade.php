@@ -124,7 +124,11 @@
                                 <td>{{$pro->delivery_status}}</td>
                                
                                 <td><img class="image_size" src="/product/{{$pro->image}}" ></td>
+                                @if($pro->delivery_status!="Deliverd")
                                 <td><a onclick ="return confirm('Are you sure Cancel the order')" href="{{url('/cancel_order',$pro->id)}}" class="btn btn-danger">Cancel Order</td>
+                                @else
+                                    <td></td>
+                                @endif
                                 <!-- <td><a  href="{{url('/edit_product',$pro->id)}}" class="btn btn-primary">Edit</td> -->
                                 
                             </tr>
@@ -135,9 +139,7 @@
                         </tbody>
 
                     </table>
-                <div class="tp">
-                    Total Price : {{$totalPrice}}
-                </div>
+                
                
 
     

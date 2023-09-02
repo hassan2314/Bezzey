@@ -42,6 +42,11 @@
       @include('home.product')
       <!-- end product section -->
      
+      <!-- comment and reply section -->
+      @include('home.comment')
+      <!-- end comment and reply section -->
+
+
       <!-- subscribe section -->
       @include('home.subscribe')
       <!-- end subscribe section -->
@@ -61,6 +66,17 @@
          
          </p>
       </div>
+      <script  type="text/javascript">
+         function reply(caller){
+            document.getElementById("commentId").value=$(caller).attr('data-Commentid');
+            $('.replyDiv').insertAfter($(caller));
+            $('.replyDiv').show();
+         }
+         function reply_close(caller){
+          
+            $('.replyDiv').hide();
+         }
+      </script>
       <!-- jQery -->
       <script src="home/js/jquery-3.4.1.min.js"></script>
       <!-- popper js -->

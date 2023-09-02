@@ -36,7 +36,7 @@
       <div class="col-sm-6 col-md-4 col-lg-4" style="margin: auto; width: 50vw; padding: 30px;">
                   
                      <div class="img-box">
-                        <img src="/product/{{$pro->image}}" alt="" style=" width: 193px; height : 262px; padding: 30px;">
+                        <img src="/product/{{$pro->image}}" alt="" style=" width: 250px; height : 250px; padding: 30px;">
                      </div>
                      <div class="detail-box">
                         <h5>
@@ -84,7 +84,9 @@
                        </div>
                     </div>
                  </div>
-
+         <!-- comment and reply section -->
+      @include('home.comment')
+      <!-- end comment and reply section -->
       <!-- footer start -->
       @include('home.footer')
       <!-- footer end -->
