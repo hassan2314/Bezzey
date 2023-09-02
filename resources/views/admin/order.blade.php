@@ -4,13 +4,18 @@
     <!-- Required meta tags -->
     @include('admin.css')
     <style>
-       body {
-  overflow-x: auto;
+        *{
+            box-sizing: border-box;
+        }
+       .content-wrapper {
+        width: 100%;
+  overflow-x: auto; /* This enables the horizontal scrollbar */
+  white-space: nowrap;
 }
 
        .div_center{
            margin: 40px auto;
-           width: 70vw;
+           width: 90vw;
            text-align: center;
           
            /* border: 3px solid green; */
