@@ -47,8 +47,10 @@ Route::get('/show_order',[HomeController::class,'show_order']);
 Route::get('/cash_order',[HomeController::class,'cash_order']);
 Route::get('/delete_cart/{id}',[HomeController::class,'delete_cart']);
 Route::get('/cancel_order/{id}',[HomeController::class,'cancel_order']);
-Route::post('/add_comment',[HomeController::class,'add_comment']);
+Route::post('/add_comment/{id}',[HomeController::class,'add_comment']);
 Route::post('/add_reply',[HomeController::class,'add_reply']);
+Route::get('/product_search',[HomeController::class,'product_search']);
+Route::get('/product_only',[HomeController::class,'product_only']);
 
 Route::get('/stripe/{totalPrice}',[HomeController::class,'stripe']);
 Route::post('stripe/{totalPrice}', [HomeController::class, 'stripePost'])->name('stripe.post');
@@ -59,3 +61,4 @@ Route::get('/print/{id}',[AdminController::class,'print']);
 Route::get('/send_email/{id}',[AdminController::class,'send_email']);
 Route::post('/send_user_email/{id}',[AdminController::class,'send_user_email']);
 Route::get('/search',[AdminController::class,'searchdata']);
+Route::get('/ex',[AdminController::class,'ex']);

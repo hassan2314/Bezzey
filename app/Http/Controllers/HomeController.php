@@ -18,7 +18,7 @@ class HomeController extends Controller
     //
     public function index()
     {
-            $comment= comment::all();
+            $comment= comment::orderby('id','desc')->get();
             $reply= reply::all();
             $product = product::paginate(9);
             return view('home.userpage', compact('product','comment','reply'));
@@ -30,16 +30,18 @@ class HomeController extends Controller
             $totalProduct = product::all()->count();
             $totalorder = oder::all()->count();
             $totaluser = user::where('usertype', '=', '0')->count();
+           
             $order = oder::all();
             $tr = 0;
 
             foreach ($order as $order) {
                 $tr = $tr + $order->price;
             }
-
+            
+            $username = Auth::user()->name;
             $delivered = $order->where('delivery_status', '=', 'Deliverd')->count();
             $pending = $order->where('delivery_status', '=', 'Processing')->count();
-            return view('admin.home', compact('totalProduct', 'totalorder', 'totaluser', 'tr', 'delivered', 'pending'));
+            return view('admin.home', compact('totalProduct','username', 'totalorder', 'totaluser', 'tr', 'delivered', 'pending'));
         } else {
             $comment= comment::all();
             $reply= reply::all();
@@ -50,7 +52,8 @@ class HomeController extends Controller
     public function product_detail($id)
     {
         $pro = product::find($id);
-        $comment= comment::all();
+        $comment= comment::where('pro_id','=',$id)->get();
+       
         $reply= reply::all();
         $product = product::paginate(9);
         
@@ -62,25 +65,44 @@ class HomeController extends Controller
             $user = Auth::user();
             $pro = product::find($id);
             $cart = new cart;
-            $cart->name = $user->name;
-            $cart->email = $user->email;
-            $cart->phone = $user->phone;
-            $cart->user_id = $user->id;
-            $cart->address = $user->address;
-            $cart->product_title = $pro->title;
-            $cart->quantity = $req->quantity;
-            if ($pro->discount_price != null) {
+            $pro_exist_id=cart::where('product_id','=',$id)->where('user_id','=',$user->id)->get('id')->first();
 
-                $cart->price = $pro->discount_price * $req->quantity;
-            } else {
-                $cart->price = $pro->price * $req->quantity;
+            if($pro_exist_id!=null){
+                $cart=cart::find($pro_exist_id)->first();
+                $quantity=$cart->quantity;
+                $cart->quantity=$quantity+$req->quantity;
+                if ($pro->discount_price != null) {
+    
+                    $cart->price = ($pro->discount_price * $req->quantity)+($quantity * $pro->discount_price);
+                } else {
+                    $cart->price = ($pro->price * $req->quantity)+($quantity * $pro->price);
+                }
+
+
             }
-            $cart->image = $pro->image;
-            $cart->product_id = $pro->id;
+            else{
+
+                $cart->name = $user->name;
+                $cart->email = $user->email;
+                $cart->phone = $user->phone;
+                $cart->user_id = $user->id;
+                $cart->address = $user->address;
+                $cart->product_title = $pro->title;
+                $cart->quantity = $req->quantity;
+                if ($pro->discount_price != null) {
+    
+                    $cart->price = $pro->discount_price * $req->quantity;
+                } else {
+                    $cart->price = $pro->price * $req->quantity;
+                }
+
+                $cart->image = $pro->image;
+                $cart->product_id = $pro->id;
+            }
 
             $cart->save();
 
-            return redirect()->back();
+            return redirect()->back()->with('message', 'Product Added to   ');
         } else {
 
             return redirect('login');
@@ -121,6 +143,7 @@ class HomeController extends Controller
         $data = oder::find($id);
         $data->payment_status = "Order Canceled";
         $data->delivery_status = "Order Canceled";
+        $data->save();
         return redirect()->back()->with('message', 'Order Canceled Successfully ');
 
     }
@@ -131,7 +154,7 @@ class HomeController extends Controller
 
         foreach ($data as $item) {
             $order = new Oder();
-
+            $product=product::find($item->product_id);
             $order->name = $item->name;
             $order->email = $item->email;
             $order->phone = $item->phone;
@@ -144,8 +167,10 @@ class HomeController extends Controller
             $order->product_id = $item->product_id;
             $order->payment_status = "On Delivery";
             $order->delivery_status = "Processing";
+            $product->quantity=$product->quantity- $item->quantity;;
 
             $order->save();
+            $product->save();
 
             // Delete the cart item after saving the order
             $cart = cart::find($item->id);
@@ -197,16 +222,16 @@ class HomeController extends Controller
 
         return back();
     }
-    public function add_comment(Request $request)
+    public function add_comment(Request $request,$id)
     {
         if (Auth::id()) {
-            $comment= new comment;
+            $comment = new comment;
             $comment->name=Auth::user()->name;
             $comment->user_id=Auth::user()->id;
             $comment->comment=$request->comment;
+            $comment->pro_id=$id;
             $comment->save();
-            $comment= comment::all();
-            $product = product::paginate(9);
+            
             return redirect()->back();
 
         } 
@@ -237,4 +262,19 @@ class HomeController extends Controller
             return redirect('login');
         }
     }
+    public function product_search(Request $req){
+        $searchText=$req->search;
+        $product=product::where('title','LIKE',"%$searchText%")->orWhere('discription','LIKE',"%$searchText%")->orWhere('catagory','LIKE',"%$searchText%")->orWhere('price','LIKE',"%$searchText%")->orWhere('discount_price','LIKE',"%$searchText%")->paginate(10);
+        $comment= comment::orderby('id','desc')->get();
+            $reply= reply::all();
+           
+            return view('home.userpage', compact('product','comment','reply'));
+    }
+    public function product_only(){
+        $comment= comment::orderby('id','desc')->get();
+        $reply= reply::all();
+        $product = product::paginate(9);
+        return view('home.all_pro', compact('product','comment','reply'));
+    }
+   
 }

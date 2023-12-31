@@ -2,7 +2,7 @@
          <h1 style="font-size:30px; text-align:center; padding-top: 20px; padding-bottom: 20px; ">
             Comments
          </h1>
-         <form action="{{url('add_comment')}}" method="post">
+         <form action="{{url('add_comment',$pro->id)}}" method="post">
             @csrf
             <textarea name="comment" id=""style="height:150px; width:600px;" placeholder="Comment Something"></textarea>
             <br>
@@ -49,3 +49,22 @@
                <button type="submit"  class="btn btn-primary" style="background-color: blue;">Reply</button>
          </form>
          </div>
+         <script  type="text/javascript">
+         function reply(caller){
+            document.getElementById("commentId").value=$(caller).attr('data-Commentid');
+            $('.replyDiv').insertAfter($(caller));
+            $('.replyDiv').show();
+         }
+         function reply_close(caller){
+          
+            $('.replyDiv').hide();
+         }
+         document.addEventListener("DOMContentLoaded", function(event) { 
+            var scrollpos = localStorage.getItem('scrollpos');
+            if (scrollpos) window.scrollTo(0, scrollpos);
+        });
+
+        window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+        };
+      </script>

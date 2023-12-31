@@ -10,7 +10,7 @@
       <meta name="keywords" content="" />
       <meta name="description" content="" />
       <meta name="author" content="" />
-      <link rel="shortcut icon" href="images/BEZZEY Logo.png" type="">
+      <link rel="shortcut icon" href="images/logo.png" type="">
       <title>Bezzey.pk</title>
       <!-- bootstrap core css -->
       <link rel="stylesheet" type="text/css" href="home/css/bootstrap.css" />
@@ -22,27 +22,19 @@
       <link href="home/css/responsive.css" rel="stylesheet" />
    </head>
    <body>
-      <div class="hero_area">
+   <div class="hero_area">
          <!-- header section strats -->
          @include('home.header')
          <!-- end header section -->
-         <!-- slider section -->
-         @include('home.slide')
-         <!-- end slider section -->
-      </div>
-      <!-- why section -->
-         @include('home.why')
-      <!-- end why section -->
-      
-      <!-- arrival section -->
-      @include('home.arrival')
-      <!-- end arrival section -->
-      
-      <!-- product section -->
+         
+         
+               <!-- product section -->
       @include('home.product')
       <!-- end product section -->
      
- 
+      <!-- comment and reply section -->
+      <!-- @include('home.comment') -->
+      <!-- end comment and reply section -->
 
 
       <!-- subscribe section -->

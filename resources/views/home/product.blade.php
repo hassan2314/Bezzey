@@ -1,11 +1,26 @@
 <section class="product_section layout_padding">
          <div class="container">
+         @if(session()->has('message'))
+                    <div class="alert alert-success">
+                        {{ session()->get('message') }} <b><a href="{{url('show_cart')}}">Cart</a></b>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" id="left">&times;</span>
+                        </button>
+                    </div>
+            @endif
             <div class="heading_container heading_center">
                <h2>
-                  Our <span>products</span>
+                  Our <span>Products</span>
                </h2>
             </div>
-
+            
+            <div style="margin:auto; padding-bottom: 30px;padding-top:20px; width:35%">
+                            <form method="get" action="{{url('product_search')}}">
+                                @csrf
+                            <input type="text" name="search" placeholder="Search Here" style="color: black; border-radius:20px;">
+                            <input type="submit" value="Search" class="btn btn-outline-primary" style=" border-radius:20px;">
+                            </form>
+                        </div>
             <div class="row">
                @foreach($product as $pro)
                <div class="col-sm-6 col-md-4 col-lg-4">
@@ -61,3 +76,11 @@
             </span>
          </div>
       </section>
+      document.addEventListener('DOMContentLoaded', function() {
+        var closeButton = document.querySelector('.alert .close');
+        var alertBox = document.querySelector('.alert');
+
+        closeButton.addEventListener('click', function() {
+            alertBox.style.display = 'none';
+        });
+    });

@@ -115,6 +115,17 @@
                             @foreach($product as $pro)
                            
                             <tr>
+                            @if($pro->delivery_status=="Order Canceled")
+                                <td><strike>{{$pro->product_title}}</strike></td>
+                               
+                                <td><strike>{{$pro->price}}</strike></td>
+                               
+                                <td><strike>{{$pro->quantity}}</strike></td>
+                               
+                                <td><strike>{{$pro->payment_status}}</strike></td>
+                                <td><strike>{{$pro->delivery_status}}</strike></td>
+                                <td><strike><img class="image_size" src="/product/{{$pro->image}}" ></strike></td>
+                                @else
                                 <td>{{$pro->product_title}}</td>
                                
                                 <td>{{$pro->price}}</td>
@@ -122,9 +133,9 @@
                                 <td>{{$pro->quantity}}</td>
                                 <td>{{$pro->payment_status}}</td>
                                 <td>{{$pro->delivery_status}}</td>
-                               
                                 <td><img class="image_size" src="/product/{{$pro->image}}" ></td>
-                                @if($pro->delivery_status!="Deliverd")
+                                @endif
+                                @if($pro->delivery_status=="Processing")
                                 <td><a onclick ="return confirm('Are you sure Cancel the order')" href="{{url('/cancel_order',$pro->id)}}" class="btn btn-danger">Cancel Order</td>
                                 @else
                                     <td></td>
