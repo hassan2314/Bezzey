@@ -150,9 +150,14 @@
                  <p class="p-3 mb-0 text-center">See all notifications</p>
                </div>
              </li>
-            <li>
-                <x-app-layout>
-                </x-app-layout>
+            <li class="nav-item dropdown">
+                <a class="nav-link" href="{{ url('/user/profile') }}">{{ Auth::user()->name ?? 'Account' }}</a>
+            </li>
+            <li class="nav-item">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-light btn-sm">Log out</button>
+                </form>
             </li>
          </div>
        </nav>

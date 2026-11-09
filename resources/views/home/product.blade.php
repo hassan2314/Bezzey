@@ -76,11 +76,16 @@
             </span>
          </div>
       </section>
+      <script>
       document.addEventListener('DOMContentLoaded', function() {
         var closeButton = document.querySelector('.alert .close');
         var alertBox = document.querySelector('.alert');
+        if (!closeButton || !alertBox) {
+            return;
+        }
 
         closeButton.addEventListener('click', function() {
             alertBox.style.display = 'none';
         });
     });
+    </script>

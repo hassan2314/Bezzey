@@ -31,16 +31,16 @@ class HomeController extends Controller
             $totalorder = oder::all()->count();
             $totaluser = user::where('usertype', '=', '0')->count();
            
-            $order = oder::all();
+            $orders = oder::all();
             $tr = 0;
 
-            foreach ($order as $order) {
-                $tr = $tr + $order->price;
+            foreach ($orders as $row) {
+                $tr = $tr + $row->price;
             }
             
             $username = Auth::user()->name;
-            $delivered = $order->where('delivery_status', '=', 'Deliverd')->count();
-            $pending = $order->where('delivery_status', '=', 'Processing')->count();
+            $delivered = $orders->where('delivery_status', '=', 'Deliverd')->count();
+            $pending = $orders->where('delivery_status', '=', 'Processing')->count();
             return view('admin.home', compact('totalProduct','username', 'totalorder', 'totaluser', 'tr', 'delivered', 'pending'));
         } else {
             $comment= comment::all();
@@ -149,12 +149,76 @@ class HomeController extends Controller
     }
     public function cash_order()
     {
-        $user_id = Auth::user()->id;
-        $data = cart::where('user_id', '=', $user_id)->get();
+        if (!Auth::id()) {
+            return redirect('login');
+        }
 
-        foreach ($data as $item) {
+        $data = cart::where('user_id', '=', Auth::id())->get();
+        if ($data->isEmpty()) {
+            return redirect('show_cart')->with('message', 'Your cart is empty.');
+        }
+
+        $this->placeOrdersFromCart('On Delivery');
+
+        return redirect('show_order')->with('message', 'Order Confirmed');
+    }
+
+    public function stripe($totalPrice)
+    {
+        if (!Auth::id()) {
+            return redirect('login');
+        }
+        if (!$this->stripeEnabled()) {
+            return redirect('show_cart')->with('message', 'Card checkout is off until Stripe test keys are set. Cash on delivery is still available.');
+        }
+
+        return view('home.stripe', compact('totalPrice'));
+    }
+    public function stripePost(Request $request, $totalPrice)
+    {
+        if (!Auth::id()) {
+            return redirect('login');
+        }
+        if (!$this->stripeEnabled()) {
+            return redirect('show_cart')->with('message', 'Card checkout is off until Stripe test keys are set. Cash on delivery is still available.');
+        }
+
+        $cartItems = cart::where('user_id', '=', Auth::id())->get();
+        if ($cartItems->isEmpty()) {
+            return redirect('show_cart')->with('message', 'Your cart is empty.');
+        }
+
+        try {
+            Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+            Stripe\Charge::create([
+                "amount" => $totalPrice * 100,
+                "currency" => "usd",
+                "source" => $request->stripeToken,
+                "description" => "Bezzey order"
+            ]);
+        } catch (\Throwable $e) {
+            return redirect('show_cart')->with('message', 'Card payment could not be completed. You can still use cash on delivery.');
+        }
+
+        $this->placeOrdersFromCart('Paid');
+        Session::flash('success', 'Payment successful!');
+
+        return redirect('show_order');
+    }
+
+    private function stripeEnabled(): bool
+    {
+        return filled(config('services.stripe.key')) && filled(config('services.stripe.secret'));
+    }
+
+    private function placeOrdersFromCart(string $paymentStatus): void
+    {
+        $items = cart::where('user_id', '=', Auth::id())->get();
+
+        foreach ($items as $item) {
             $order = new Oder();
-            $product=product::find($item->product_id);
+            $product = product::find($item->product_id);
             $order->name = $item->name;
             $order->email = $item->email;
             $order->phone = $item->phone;
@@ -165,62 +229,18 @@ class HomeController extends Controller
             $order->price = $item->price;
             $order->image = $item->image;
             $order->product_id = $item->product_id;
-            $order->payment_status = "On Delivery";
+            $order->payment_status = $paymentStatus;
             $order->delivery_status = "Processing";
-            $product->quantity=$product->quantity- $item->quantity;;
-
             $order->save();
-            $product->save();
 
-            // Delete the cart item after saving the order
-            $cart = cart::find($item->id);
-            $cart->delete();
+            if ($product) {
+                $remaining = (int) $product->quantity - (int) $item->quantity;
+                $product->quantity = $remaining > 0 ? $remaining : 0;
+                $product->save();
+            }
+
+            $item->delete();
         }
-
-        return redirect()->back()->with('message', 'Order Confirmed');
-    }
-
-    public function stripe($totalPrice)
-    {
-        return view('home.stripe', compact('totalPrice'));
-    }
-    public function stripePost(Request $request, $totalPrice)
-    {
-        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-
-        Stripe\Charge::create([
-            "amount" => $totalPrice * 100,
-            "currency" => "usd",
-            "source" => $request->stripeToken,
-            "description" => "Thanks For Payment"
-        ]);
-        $user_id = Auth::user()->id;
-        $data = cart::where('user_id', '=', $user_id)->get();
-
-        $oder = new oder;
-
-        foreach ($data as $data) {
-            $oder->name = $data->name;
-            $oder->email = $data->email;
-            $oder->phone = $data->phone;
-            $oder->user_id = $data->id;
-            $oder->address = $data->address;
-            $oder->product_title = $data->product_title;
-            $oder->quantity = $data->quantity;
-            $oder->price = $data->price;
-            $oder->image = $data->image;
-            $oder->product_id = $data->id;
-            $oder->payment_status = "Paid";
-            $oder->delivery_status = "Processing";
-
-            $oder->save();
-            $cart = cart::find($data->id);
-            $cart->delete();
-
-        }
-        Session::flash('success', 'Payment successful!');
-
-        return back();
     }
     public function add_comment(Request $request,$id)
     {

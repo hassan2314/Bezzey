@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <base href="/public">
+  <base href="/">
     <!-- Required meta tags -->
     @include('admin.css')
     <style>
@@ -20,10 +20,18 @@
        td,th{
         border: 2px solid green;
        }
-       /* .image_size{
-        width: 300px;
-        height: 200px;
-       } */
+       .image_size{
+        width: 88px;
+        height: 88px;
+        object-fit: cover;
+       }
+       table {
+        background: #fff;
+        border-collapse: collapse;
+       }
+       .div_center, .div_center td, .div_center th {
+        color: #14213d;
+       }
        thead{
         background-color:skyblue;
        }
@@ -74,11 +82,11 @@
                     <table>
                         <thead>
                             <th>Title</th>
-                            <th>Discription</th>
+                            <th>Description</th>
                             <th>Price</th>
                             <th>Discount Price</th>
                             <th>Quantity</th>
-                            <th>Catagory</th>
+                            <th>Category</th>
                             <th>Image</th>
                             <th>Delete</th>
                             <th>Edit</th>

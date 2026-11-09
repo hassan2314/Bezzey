@@ -47,11 +47,15 @@
                         </form> -->
                         @if (Route::has('login'))
                         @auth
-                        <li >
-                        <x-app-layout>
-    
-                        </x-app-layout>
-</li>
+                        <li class="nav-item">
+                           <a class="nav-link" href="{{ url('/redirect') }}">{{ Auth::user()->name }}</a>
+                        </li>
+                        <li class="nav-item">
+                           <form method="POST" action="{{ route('logout') }}">
+                              @csrf
+                              <button type="submit" class="btn btn-primary">Log out</button>
+                           </form>
+                        </li>
                         @else
                         <li class="nav-item" id="login">
                            <a class="btn btn-primary" href="{{ route('login') }}">Login</a>

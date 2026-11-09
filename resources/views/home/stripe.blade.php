@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<base href="/public">
+<base href="/">
     <!-- <title>Laravel 9 - Stripe Payment Gateway Integration Example - ItSolutionStuff.com</title> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
@@ -21,7 +21,7 @@
         }
       </style>
 </head>
-<body>
+<body class="sub_page">
 <div class="hero_area" >
          <!-- header section strats -->
          <span style="font-size: 15px; ">@include('home.header')</span>
@@ -51,7 +51,7 @@
                             method="post" 
                             class="require-validation"
                             data-cc-on-file="false"
-                            data-stripe-publishable-key="{{ env('STRIPE_KEY') }}"
+                            data-stripe-publishable-key="{{ config('services.stripe.key') }}"
                             id="payment-form">
                         @csrf
     

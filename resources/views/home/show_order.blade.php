@@ -2,7 +2,7 @@
 <html>
    <head>
       <!-- Basic -->
-      <base href="/public">
+      <base href="/">
       <meta charset="utf-8" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <!-- Mobile Metas -->
@@ -77,7 +77,7 @@
    } */
        </style>
    </head>
-   <body>
+   <body class="sub_page">
       <div class="hero_area">
          <!-- header section strats -->
          @include('home.header')
