@@ -32,9 +32,7 @@
       @include('home.product')
       <!-- end product section -->
      
-      <!-- comment and reply section -->
-      <!-- @include('home.comment') -->
-      <!-- end comment and reply section -->
+      {{-- Comments only belong on product_detail (needs $pro). Do not @include here. --}}
 
 
       <!-- subscribe section -->
