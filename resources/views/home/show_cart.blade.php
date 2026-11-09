@@ -2,7 +2,7 @@
 <html>
    <head>
       <!-- Basic -->
-      <base href="/public">
+      <base href="/">
       <meta charset="utf-8" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <!-- Mobile Metas -->
@@ -76,7 +76,7 @@
    } */
        </style>
    </head>
-   <body>
+   <body class="sub_page">
       <div class="hero_area">
          <!-- header section strats -->
          @include('home.header')
@@ -136,7 +136,11 @@
                 <div>
                     <h1 style="padding-bottom: 20px; font-size: 25px; ">Procceed to Oder</h1>
                     <a href="{{url('cash_order')}}" class="btn btn-danger">Cash on Delivery</a>
+                    @if(filled(config('services.stripe.key')) && filled(config('services.stripe.secret')))
                     <a href="{{url('stripe',$totalPrice)}}" class="btn btn-danger">Pay Using Card</a>
+                    @else
+                    <p style="margin-top: 12px;">Card payment is off until Stripe test keys are set. Cash on delivery is available.</p>
+                    @endif
                 </div>
 
     

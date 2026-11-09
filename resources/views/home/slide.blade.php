@@ -11,16 +11,16 @@
                               <div class="detail-box">
                                  <h1>
                                     <span>
-                                    Sale 20% Off
+                                    Bezzey
                                     </span>
                                     <br>
-                                    On Everything
+                                    Clothes, home, and the week ahead
                                  </h1>
                                  <p>
-                                    Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
+                                    A small fictional shop: cotton tees, a wool coat, a ceramic mug, and cash on delivery when you are not ready for a card.
                                  </p>
                                  <div class="btn-box">
-                                    <a href="" class="btn1">
+                                    <a href="{{ url('product_only') }}" class="btn1">
                                     Shop Now
                                     </a>
                                  </div>
@@ -36,16 +36,16 @@
                               <div class="detail-box">
                                  <h1>
                                     <span>
-                                    Sale 20% Off
+                                    Bezzey
                                     </span>
                                     <br>
-                                    On Everything
+                                    Clothes, home, and the week ahead
                                  </h1>
                                  <p>
-                                    Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
+                                    A small fictional shop: cotton tees, a wool coat, a ceramic mug, and cash on delivery when you are not ready for a card.
                                  </p>
                                  <div class="btn-box">
-                                    <a href="" class="btn1">
+                                    <a href="{{ url('product_only') }}" class="btn1">
                                     Shop Now
                                     </a>
                                  </div>
@@ -61,16 +61,16 @@
                               <div class="detail-box">
                                  <h1>
                                     <span>
-                                    Sale 20% Off
+                                    Bezzey
                                     </span>
                                     <br>
-                                    On Everything
+                                    Clothes, home, and the week ahead
                                  </h1>
                                  <p>
-                                    Explicabo esse amet tempora quibusdam laudantium, laborum eaque magnam fugiat hic? Esse dicta aliquid error repudiandae earum suscipit fugiat molestias, veniam, vel architecto veritatis delectus repellat modi impedit sequi.
+                                    A small fictional shop: cotton tees, a wool coat, a ceramic mug, and cash on delivery when you are not ready for a card.
                                  </p>
                                  <div class="btn-box">
-                                    <a href="" class="btn1">
+                                    <a href="{{ url('product_only') }}" class="btn1">
                                     Shop Now
                                     </a>
                                  </div>
